@@ -1,0 +1,13 @@
+.env
+.streamlit/secrets.toml
+.venv/
+__pycache__/
+*.py[cod]
+.DS_Store
+logs/
+models/*.pkl
+data/raw/*.csv
+data/processed/*.csv
+data/applicant_history.db
+data/users/registry.json
+data/user_portfolios/*.json

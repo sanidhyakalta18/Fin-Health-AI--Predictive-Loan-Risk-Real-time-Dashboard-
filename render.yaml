@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: fin-health-ai
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run app.py --server.address=0.0.0.0 --server.port=$PORT --server.headless=true
+    healthCheckPath: /_stcore/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: FIN_HEALTH_ENV
+        value: production
+      - key: FIN_HEALTH_SECRET_KEY
+        generateValue: true
+      - key: FIN_HEALTH_LOG_LEVEL
+        value: INFO
+      - key: FIN_HEALTH_SYNTHETIC_ROWS
+        value: "1000"
+
