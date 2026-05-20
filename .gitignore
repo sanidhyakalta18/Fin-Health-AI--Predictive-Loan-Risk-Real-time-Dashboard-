@@ -6,7 +6,10 @@ __pycache__/
 .DS_Store
 logs/
 models/*.pkl
+!models/credit_risk_random_forest.pkl
+!models/credit_risk_scaler.pkl
 data/raw/*.csv
+!data/raw/loan_data.csv
 data/processed/*.csv
 data/applicant_history.db
 data/users/registry.json

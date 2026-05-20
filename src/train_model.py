@@ -7,7 +7,6 @@ and persists the estimator and StandardScaler with joblib.
 
 import logging
 
-import joblib
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score
@@ -24,6 +23,8 @@ logger = logging.getLogger(__name__)
 
 def train_credit_risk_model() -> dict[str, float]:
     """Train and persist the configured credit-risk model artifacts."""
+    import joblib
+
     config = get_config()
     if not config.loan_data_path.is_file():
         raise FileNotFoundError(
