@@ -8,15 +8,17 @@ scores every row in ``data/raw/loan_data.csv``.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
-import plotly.graph_objects as go
 
 from src.core.config import get_config
 from src.ml.artifacts import load_artifacts
 from src.ml.preprocessing import FEATURE_COLUMNS, validate_feature_columns
+
+if TYPE_CHECKING:
+    import plotly.graph_objects as go
 
 DATA_PATH = get_config().loan_data_path
 
@@ -102,8 +104,10 @@ def build_portfolio_gauge_figure(
     *,
     threshold_pct: float = 40.0,
     title: str = "Avg predicted default risk",
-) -> go.Figure:
+) -> "go.Figure":
     """Gauge: mean model default probability vs portfolio benchmark."""
+    import plotly.graph_objects as go
+
     value = float(np.clip(mean_pred_prob * 100.0, 0.0, 100.0))
     fig = go.Figure(
         go.Indicator(
@@ -144,13 +148,15 @@ def build_credit_score_histogram_figure(
     scores: pd.Series,
     *,
     bin_width: int = 20,
-) -> go.Figure:
+) -> "go.Figure":
     """
     Credit score counts by fixed-width bins; each bar colored by FICO-style tier.
 
     Uses a single ``go.Bar`` with per-bin colors (equivalent to one trace per bin visually).
     Faint vertical bands mark tier boundaries.
     """
+    import plotly.graph_objects as go
+
     s = pd.to_numeric(scores, errors="coerce").dropna()
     if s.empty:
         raise ValueError("No credit scores to plot.")
@@ -247,7 +253,7 @@ def build_portfolio_bundle(
     *,
     high_risk_threshold: float | None = None,
     gauge_threshold_pct: float | None = None,
-) -> tuple[dict[str, Any], go.Figure, go.Figure]:
+) -> tuple[dict[str, Any], "go.Figure", "go.Figure"]:
     """
     Load data (if needed), score with persisted model, return KPIs + two Plotly figures.
     """

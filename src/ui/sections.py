@@ -605,7 +605,9 @@ def render_risk_analysis_tab(
 
 
 def render_market_portfolio_tab(cached_portfolio_bundle) -> None:
-    from src.portfolio_dashboard import DATA_PATH
+    from src.core.config import get_config
+
+    data_path = get_config().loan_data_path
 
     st.markdown("### Market portfolio health")
     st.caption("Full synthetic loan book (`loan_data.csv`) scored with your trained model.")
@@ -616,9 +618,9 @@ def render_market_portfolio_tab(cached_portfolio_bundle) -> None:
         _render_status_pill("Setup required", "Model artifacts were not found.", "danger")
         st.warning("Train the model first (`python -m src.train_model`).")
         return
-    if not DATA_PATH.is_file():
+    if not data_path.is_file():
         _render_status_pill("Data required", "The synthetic loan book is missing.", "danger")
-        st.warning(f"Missing `{DATA_PATH}`. Run `python -m src.generate_data`.")
+        st.warning(f"Missing `{data_path}`. Run `python -m src.generate_data`.")
         return
 
     model_path, scaler_path = rp
@@ -629,7 +631,7 @@ def render_market_portfolio_tab(cached_portfolio_bundle) -> None:
             progress.progress(35, text="Scoring applicants...")
             with st.spinner("Calculating portfolio KPIs and charts..."):
                 kpis, gauge_fig, hist_fig = cached_portfolio_bundle(
-                    DATA_PATH.stat().st_mtime,
+                    data_path.stat().st_mtime,
                     model_path.stat().st_mtime,
                     scaler_path.stat().st_mtime,
                 )
