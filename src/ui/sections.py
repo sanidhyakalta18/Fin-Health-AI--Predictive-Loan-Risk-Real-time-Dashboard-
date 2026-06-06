@@ -347,7 +347,7 @@ def render_sidebar_login() -> None:
     if is_logged_in():
         st.sidebar.success(f"Signed in as **{st.session_state.auth_display_name}**")
         st.sidebar.caption(st.session_state.auth_user)
-        if st.sidebar.button("Sign out", width="stretch"):
+        if st.sidebar.button("Sign out", use_container_width=True):
             st.session_state.auth_user = None
             st.session_state.auth_display_name = None
             st.rerun()
@@ -364,7 +364,7 @@ def render_sidebar_login() -> None:
         password = st.text_input("Password", type="password")
         submitted = st.form_submit_button(
             "Create account" if mode == "Register" else "Sign in",
-            width="stretch",
+            use_container_width=True,
         )
 
     if submitted:
@@ -477,7 +477,7 @@ def render_risk_analysis_tab(
             )
             debt = st.slider("Debt-to-income (DTI)", 0.0, 1.0, defaults["debt"])
             exp = st.number_input("Years of employment", 0, 40, defaults["exp"])
-            submit = st.form_submit_button("Run risk analysis", width="stretch")
+            submit = st.form_submit_button("Run risk analysis", use_container_width=True)
 
     with col_viz:
         if not submit:
@@ -565,7 +565,7 @@ def render_risk_analysis_tab(
                     shap_fig = fig
                 progress.progress(100, text="Risk analysis ready.")
                 st.success("Risk assessment and explanation are ready.")
-                st.plotly_chart(fig, width="stretch", config=PLOTLY_CONFIG)
+                st.plotly_chart(fig, use_container_width=True, config=PLOTLY_CONFIG)
             except Exception as exc:  # noqa: BLE001
                 progress.progress(100, text="Prediction complete. Explanation unavailable.")
                 st.warning(f"Explainability chart unavailable: {exc}")
@@ -586,7 +586,7 @@ def render_risk_analysis_tab(
             data=pdf_bytes,
             file_name=f"fin_health_risk_report_{history_id}.pdf",
             mime="application/pdf",
-            width="stretch",
+            use_container_width=True,
         )
 
         if is_logged_in():
@@ -709,7 +709,7 @@ def render_history_tab() -> None:
                 "Employment years",
             ]
         ],
-        width="stretch",
+        use_container_width=True,
         hide_index=True,
     )
 
@@ -725,7 +725,7 @@ def render_history_tab() -> None:
 
     del_col, clear_col = st.columns(2)
     with del_col:
-        if st.button("Delete selected analysis", type="secondary", width="stretch"):
+        if st.button("Delete selected analysis", type="secondary", use_container_width=True):
             with st.spinner("Deleting selected history record..."):
                 removed = delete_analysis(int(selected_id), user_email=email)
             if removed:
@@ -733,7 +733,7 @@ def render_history_tab() -> None:
                 st.rerun()
             st.warning("That analysis could not be found.")
     with clear_col:
-        if st.button("Clear visible history", type="secondary", width="stretch"):
+        if st.button("Clear visible history", type="secondary", use_container_width=True):
             with st.spinner("Clearing analysis history..."):
                 removed_count = clear_history(user_email=email)
             st.success(f"Deleted {removed_count} history record(s).")
@@ -802,9 +802,9 @@ def _render_portfolio_kpis_and_charts(
 
     gcol, hcol = st.columns(2)
     with gcol:
-        st.plotly_chart(gauge_fig, width="stretch", config=PLOTLY_CONFIG)
+        st.plotly_chart(gauge_fig, use_container_width=True, config=PLOTLY_CONFIG)
     with hcol:
-        st.plotly_chart(hist_fig, width="stretch", config=PLOTLY_CONFIG)
+        st.plotly_chart(hist_fig, use_container_width=True, config=PLOTLY_CONFIG)
 
 
 def render_my_portfolio_tab() -> None:
@@ -837,7 +837,7 @@ def render_my_portfolio_tab() -> None:
             debt = st.slider("DTI", 0.0, 1.0, 0.25, key="my_dti")
             exp = st.number_input("Employment years", 0, 40, 5, key="my_exp")
             notes = st.text_area("Notes (optional)", height=68)
-            add_btn = st.form_submit_button("Add to portfolio", width="stretch")
+            add_btn = st.form_submit_button("Add to portfolio", use_container_width=True)
 
         if add_btn:
             with st.spinner("Saving applicant to your portfolio..."):
@@ -883,7 +883,7 @@ def render_my_portfolio_tab() -> None:
             )
         st.dataframe(
             pd.DataFrame(table_rows).drop(columns=["id"]),
-            width="stretch",
+            use_container_width=True,
             hide_index=True,
         )
 
